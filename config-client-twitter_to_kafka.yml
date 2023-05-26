@@ -8,6 +8,7 @@ twitter-to-kafka-service:
     - Spring
     - Kafka
     - Elasticsearch
+    - Test
   welcome-message: Hello microservices!
   enable-v2-tweets: false
   enable-v1-tweets: false
