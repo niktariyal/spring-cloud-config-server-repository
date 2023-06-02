@@ -13,7 +13,7 @@ elastic-query-web-client:
     accept: ${elastic-query-web-client.webclient.accept-type}
 
 server:
-  port: 8183
+  port: 8184
 
 spring:
   webflux:
