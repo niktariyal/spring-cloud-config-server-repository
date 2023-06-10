@@ -32,7 +32,7 @@ spring:
           keycloak:
             client-id: elastic-query-service
             client-secret: dd0d919b-165f-4162-aab6-7cf4f5c6623a
-            authorizationGrantType:
+            authorizationGrantType: client_credentials
         provider:
           keycloak:
             tokenUri: http://localhost:9091/auth/realms/microservices_realm/protocol/openid-connect/token
