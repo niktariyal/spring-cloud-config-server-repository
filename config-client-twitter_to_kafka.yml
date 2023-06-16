@@ -35,7 +35,7 @@ kafka-config:
     - twitter-topic
     - twitter-analytics-topic
   num-of-partitions: 3
-  replication-factor: 3
+  replication-factor: 1
 
 kafka-producer-config:
   key-serializer-class: org.apache.kafka.common.serialization.LongSerializer
