@@ -8,6 +8,10 @@ analytics-service:
   custom-audience: analytics-service
 
 spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false    #to work with spring cloud loadbalancer
   security:
     oauth2:
       resourceserver:

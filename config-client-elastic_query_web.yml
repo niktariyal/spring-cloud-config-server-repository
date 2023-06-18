@@ -13,12 +13,12 @@ elastic-query-web-client:
     accept-type: 'application/json'   # 'application/vnd.api.v1+json'
 #    base-url: 'http://localhost:8183/elastic-query-service/documents'
     base-url: 'http://elastic-query-service/elastic-query-service/documents'
-    service-id: elastic-query-service
-    instances:
-      -
-        id: elastic-query-service-1
-        host: localhost
-        port: 8183
+#    service-id: elastic-query-service
+#    instances:       #Removing serviceId and instances variables here as using springcloud euraka loadbalancing
+#      -
+#        id: elastic-query-service-1
+#        host: localhost
+#        port: 8183
 #      -
 #        id: elastic-query-service-2
 #        host: localhost
@@ -29,6 +29,10 @@ elastic-query-web-client:
     accept: ${elastic-query-web-client.webclient.accept-type}
 
 spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false    #to work with spring cloud loadbalancer
   thymeleaf:
     cache: false
   security:
