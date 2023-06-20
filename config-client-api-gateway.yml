@@ -1,0 +1,79 @@
+gateway-service:
+  timeout-ms: 3000
+  failure-rate-threshold: 50
+  slow-call-rate-threshold: 50
+  slow-call-duration-threshold: 50
+  permitted-num-of-calls-in-half-open-state: 10
+  sliding-window-size: 10
+  min-number-of-calls: 10
+  wait-duration-in-open-state: 60000
+
+server:
+  port: 9090
+
+spring:
+  application:
+    name: api-gateway-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false    #bcoz using springcloud loadbalancer
+    gateway:
+      discovery:
+        locator:
+          enabled: false    #false becoz we want to customize route definition here in config , instead of getting them discovery as pre-configured. Becoz bydefalt discovery locator adds routes with name starting with reactive_composite_discovery_client so our explicit routes will be overwritten and omitted if discovery locator enabled
+          lowerCaseServiceId: true
+      routes:
+        - id: elastic-query-service
+          uri: lb://elastic-query-service   #here lb means that elastic-query-service will be fetched from discovery-service
+          predicates:
+            - Path=/elastic-query-service/**
+          filters:
+            - RewritePath=/elastic-query-service/(?<path>.*), /$\{path}
+            - name: RequestRateLimiter    #ratelimiter uses token bucket algorithm, which will fill token in each seconds and spend them, when user requests.
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+                key-resolver: "#{@authHeaderResolver}"
+            - name: CircuitBreaker
+              args:
+                name: queryServiceCircuitBreaker
+                fallbackUri: forward:/fallback/query-fallback
+        - id: analytics-service
+          uri: lb://analytics-service
+          predicates:
+            - Path=/analytics-service/**
+          filters:
+            - RewritePath=/analytics-service/(?<path>.*), /$\{path}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+                key-resolver: "#{@authHeaderResolver}"
+            - name: CircuitBreaker
+              args:
+                name: analyticsServiceCircuitBreaker
+                fallbackUri: forward:/fallback/query-fallback
+        - id: kafka-streams-service
+          uri: lb://kafka-streams-service
+          predicates:
+            - Path=/kafka-streams-service/**
+          filters:
+            - RewritePath=/kafka-streams-service/(?<path>.*), /$\{path}
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+                key-resolver: "#{@authHeaderResolver}"
+            - name: CircuitBreaker
+              args:
+                name: streamsServiceCircuitBreaker
+                fallbackUri: forward:/fallback/query-fallback
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+
+
+
+
