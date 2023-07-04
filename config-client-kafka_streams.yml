@@ -5,7 +5,8 @@ kafka-streams-service:
 server:
   port: 8187
   servlet:
-    context-path: /kafka-streams-service
+#    context-path: /kafka-streams-service
+    context-path: /
 
 spring:
   cloud:

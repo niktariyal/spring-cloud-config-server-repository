@@ -53,7 +53,7 @@ spring:
             - name: CircuitBreaker
               args:
                 name: analyticsServiceCircuitBreaker
-                fallbackUri: forward:/fallback/query-fallback
+                fallbackUri: forward:/fallback/analytics-fallback
         - id: kafka-streams-service
           uri: lb://kafka-streams-service
           predicates:
@@ -68,7 +68,7 @@ spring:
             - name: CircuitBreaker
               args:
                 name: streamsServiceCircuitBreaker
-                fallbackUri: forward:/fallback/query-fallback
+                fallbackUri: forward:/fallback/streams-fallback
   redis:
     host: 127.0.0.1
     port: 6379
