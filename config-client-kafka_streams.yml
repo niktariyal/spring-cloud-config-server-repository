@@ -26,9 +26,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-security:
-  paths-to-ignore: /api-docs
-
 retry-config:
   initial-interval-ms: 1000
   max-interval-ms: 10000
@@ -50,3 +47,18 @@ kafka-streams-config:
   output-topic-name: twitter-analytics-topic
   state-file-location: ${HOME}/kafka-streaming-state
   word-count-store-name: word-count-store
+
+security:
+  paths-to-ignore: /api-docs, /actuator/**
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure.include: health, prometheus
+      path-mapping.prometheus: metrics
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms

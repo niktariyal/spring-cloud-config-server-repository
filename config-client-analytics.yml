@@ -54,9 +54,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
-security:
-  paths-to-ignore: /api-docs
-
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092   #, localhost:39092
   schema-registry-url-key: schema.registry.url
@@ -90,3 +87,17 @@ retry-config:
   max-attempts: 3
   sleep-time-ms: 2000
 
+security:
+  paths-to-ignore: /api-docs, /actuator/**
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure.include: health, prometheus
+      path-mapping.prometheus: metrics
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
